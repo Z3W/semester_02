@@ -33,7 +33,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::initFileStreamFunktion(){
 
-    QFile file("scenarier.txt");
+    QFile file("scenarier.csv");
     if(file.open(QIODevice::ReadWrite|QIODevice::Text) )
     {
         if(file.pos()==0){
@@ -76,16 +76,16 @@ void MainWindow::on_pushButton_clicked()
     scenlist.addScenarie(op1.getTempVec(),op1.getNavn());
     qDebug() << op1.getNavn();
     AddLabel(scenlist.AntalElementer());
-    QFile file("scenarier.txt");
+    QFile file("scenarier.csv");
 
-    if(file.open(QIODevice::ReadWrite|QIODevice::Text) )
+    if(file.open(QIODevice::ReadWrite|QIODevice::Text | QIODevice::Append) )
     {
         vector<char> v1 = op1.getTempVec();
         auto sized = v1.size();
         QString temp_ = QString::fromLatin1(&v1[0] );
         temp_.resize(sized);
         QTextStream stream(&file);
-        stream << temp_;
+        stream << temp_ << "\n";
         file.close();
     }
 
@@ -116,7 +116,7 @@ void MainWindow::on_sletAlarmKnap_clicked()
 void MainWindow::initSerial(){
 
     serial = new QSerialPort(this);
-    serial->setPortName("COM5");
+    serial->setPortName("COM4");
     serial->open(QIODevice::ReadWrite);
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setDataBits(QSerialPort::Data8);
